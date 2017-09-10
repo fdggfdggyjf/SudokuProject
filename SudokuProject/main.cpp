@@ -1,5 +1,6 @@
 #include<iostream>
 #include<string>
+#include<time.h>
 #include<cstring>
 #include<stdlib.h>
 #include<fstream>
@@ -9,6 +10,24 @@ fstream outfile("sudoku.txt",  ios::out);
 int Sudoku[9][9]={0};
 int number;
 int newnum=0;
+int t=time(0);
+
+void randnumber(int *a)   //随机排列1~9 
+{
+	int temp=0,randnum;
+	for(int i=0;i<9;i++)
+	{
+		a[i]=i+1;
+	}
+	srand((unsigned)(t++));
+	for(int i=0;i<9;i++)
+	{
+		randnum=rand()%9;
+		temp=a[i];
+		a[i]=a[randnum];
+		a[randnum]=temp;
+	}
+}
 
 void Init() //初始化数独棋盘 
 {
@@ -70,11 +89,13 @@ void fillnumbers(int a[9][9],int step)
  	}
  	else    //没有数据
 	{
-		for(int k=1;k<=9;k++)
+		int index[9];
+		randnumber(index);
+		for(int k=0;k<9;k++)
 		{
-   			if(check(a,i,j,k)) //第i行、第j列可以是k
+   			if(check(a,i,j,index[k])) //第i行、第j列可以是k
    			{
-				a[i][j]=k; //设为k
+				a[i][j]=index[k]; //设为k
 				if(step == 80)
 				{
 					printSudoku(a);
